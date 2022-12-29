@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 const SubmitBuildPage: NextPage = () => {
   const createBuildMutation = trpc.builds.createBuild.useMutation();
 
-  const [matchUp, setMatchUp] = useState("ZvT");
+  const [matchUp, setMatchUp] = useState("zvt");
   const [build, setBuildOrder] = useState("");
   const router = useRouter();
 
