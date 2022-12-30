@@ -11,11 +11,15 @@ const HomePage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
+      <main className="flex min-h-screen flex-col items-center justify-center gap-8 text-black dark:bg-gray-800 dark:text-white">
         <h1>Welcome to SC2 Build Order Manager</h1>
 
-        <Link href="/submit-build">Submit a new Build</Link>
-        <Link href="/builds">View Builds</Link>
+        <Link className="link" href="/submit-build">
+          Submit a new Build
+        </Link>
+        <Link className="link" href="/races">
+          View Builds
+        </Link>
       </main>
     </>
   );

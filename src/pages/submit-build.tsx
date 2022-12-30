@@ -17,7 +17,7 @@ const SubmitBuildPage: NextPage = () => {
       matchUp,
       build,
     });
-    router.push("/builds");
+    router.push("/");
   }
 
   return (
@@ -28,7 +28,7 @@ const SubmitBuildPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
+      <main className="flex min-h-screen flex-col items-center justify-center gap-8 text-black dark:bg-gray-800 dark:text-white">
         <h1>Submit a Build Order</h1>
 
         <form className="flex flex-col gap-4" onSubmit={handleSubmitBuildOrder}>
