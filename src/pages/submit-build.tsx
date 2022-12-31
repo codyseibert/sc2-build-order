@@ -8,6 +8,10 @@ const SubmitBuildPage: NextPage = () => {
   const createBuildMutation = trpc.builds.createBuild.useMutation();
 
   const [matchUp, setMatchUp] = useState("zvt");
+  const [style, setStyle] = useState("cheese");
+  const [author, setAuthor] = useState("");
+  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState("");
   const [build, setBuildOrder] = useState("");
   const router = useRouter();
 
@@ -16,6 +20,10 @@ const SubmitBuildPage: NextPage = () => {
     await createBuildMutation.mutateAsync({
       matchUp,
       build,
+      style,
+      title,
+      description,
+      author,
     });
     router.push("/");
   }
@@ -28,37 +36,132 @@ const SubmitBuildPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex min-h-screen flex-col items-center justify-center gap-8 text-black dark:bg-gray-800 dark:text-white">
+      <main className="flex min-h-screen flex-col items-center justify-center gap-8 pb-12 pt-12 text-black dark:bg-gray-800 dark:text-white">
         <h1>Submit a Build Order</h1>
 
-        <form className="flex flex-col gap-4" onSubmit={handleSubmitBuildOrder}>
-          <label htmlFor="match-up-select">Match Up</label>
-          <select
-            className="text-black"
-            value={matchUp}
-            onChange={(e) => setMatchUp(e.target.value)}
-            id="match-up-select"
-            required
-          >
-            <option value="zvt">ZvT</option>
-            <option value="zvp">ZvP</option>
-            <option value="zvz">ZvZ</option>
-            <option value="pvt">PvT</option>
-            <option value="pvp">PvP</option>
-            <option value="pvz">PvZ</option>
-            <option value="tvt">TvT</option>
-            <option value="tvp">TvP</option>
-            <option value="tvz">TvZ</option>
-          </select>
+        <form
+          className="flex w-full flex-col items-center gap-4"
+          onSubmit={handleSubmitBuildOrder}
+        >
+          <div className="grid grid-cols-2">
+            <fieldset>
+              <label
+                htmlFor="match-up-select"
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Match Up
+              </label>
+              <select
+                className="rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                value={matchUp}
+                onChange={(e) => setMatchUp(e.target.value)}
+                id="match-up-select"
+                required
+              >
+                <option value="zvt">ZvT</option>
+                <option value="zvp">ZvP</option>
+                <option value="zvz">ZvZ</option>
+                <option value="pvt">PvT</option>
+                <option value="pvp">PvP</option>
+                <option value="pvz">PvZ</option>
+                <option value="tvt">TvT</option>
+                <option value="tvp">TvP</option>
+                <option value="tvz">TvZ</option>
+              </select>
+            </fieldset>
 
-          <textarea
-            required
-            className="p-2 text-black"
-            value={build}
-            onChange={(e) => setBuildOrder(e.target.value)}
-          />
+            <fieldset>
+              <label
+                htmlFor="style"
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Style
+              </label>
+              <select
+                className="rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                value={style}
+                onChange={(e) => setStyle(e.target.value)}
+                id="style"
+                required
+              >
+                <option value="cheese">Cheese</option>
+                <option value="all in">All In</option>
+                <option value="macro">Macro</option>
+                <option value="timing attack">Timing Attack</option>
+              </select>
+            </fieldset>
+          </div>
 
-          <button className="bg-white p-2 text-black">submit</button>
+          <div className="grid grid-cols-2 gap-8">
+            <fieldset>
+              <label
+                htmlFor="author"
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Author
+              </label>
+
+              <input
+                id="author"
+                className="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+              />
+            </fieldset>
+
+            <fieldset>
+              <label
+                htmlFor="title"
+                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Title
+              </label>
+
+              <input
+                id="title"
+                className="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </fieldset>
+          </div>
+
+          <fieldset className="w-3/4">
+            <label
+              htmlFor="description"
+              className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Description
+            </label>
+
+            <textarea
+              id="description"
+              className="h-[140px] w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </fieldset>
+
+          <fieldset className="w-3/4">
+            <label
+              htmlFor="build"
+              className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Build Order
+            </label>
+
+            <textarea
+              required
+              id="build"
+              className="h-[400px] w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              value={build}
+              onChange={(e) => setBuildOrder(e.target.value)}
+            />
+          </fieldset>
+
+          <button className="mr-2 mb-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Submit
+          </button>
         </form>
       </main>
     </>
