@@ -38,4 +38,14 @@ export const buildsRouter = router({
       });
       return builds;
     }),
+  getBuildById: publicProcedure
+    .input(z.object({ buildId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const build = await ctx.prisma.buildOrder.findUnique({
+        where: {
+          id: input.buildId,
+        },
+      });
+      return build;
+    }),
 });
