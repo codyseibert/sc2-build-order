@@ -100,7 +100,9 @@ const FindBuildsPage: NextPage = () => {
   const lowerCaseSearch = search.toLocaleLowerCase();
 
   const filteredBuilds = (builds.data ?? [])
-    .filter((build) => build.style === selectedBuildType)
+    .filter((build) =>
+      selectedBuildType === "all" ? true : build.style === selectedBuildType
+    )
     .filter((build) =>
       lowerCaseSearch !== ""
         ? ["author", "title", "description"].some((key) =>
@@ -123,59 +125,61 @@ const FindBuildsPage: NextPage = () => {
         <h1 className="text-4xl text-white">
           {raceName} vs {opponentRace}
         </h1>
-        <Form className="w-1/3">
-          <fieldset>
-            <Label htmlFor="search">
-              Filter (by name, author, or description)
-            </Label>
-            <Input
-              id="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </fieldset>
+        <div className="flex gap-12">
+          <Form className="w-1/4">
+            <fieldset>
+              <Label htmlFor="search">
+                Filter (by name, author, or description)
+              </Label>
+              <Input
+                id="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </fieldset>
 
-          <fieldset>
-            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-              Build Type
-            </label>
-            <ul className="w-full items-center rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:flex">
-              {buildTypes.map((buildType) => (
-                <li
-                  key={buildType}
-                  className="w-full border-b border-gray-200 dark:border-gray-600 sm:border-b-0 sm:border-r"
-                >
-                  <div className="flex items-center pl-3">
-                    <input
-                      id={`build-radio-${buildType}`}
-                      type="radio"
-                      value={buildType}
-                      name="list-radio"
-                      checked={buildType === selectedBuildType}
-                      className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-500 dark:bg-gray-600 dark:ring-offset-gray-700 dark:focus:ring-blue-600"
-                      onChange={(e) => setSelectedBuildType(e.target.value)}
-                    />
-                    <label
-                      htmlFor={`build-radio-${buildType}`}
-                      className="ml-2 w-full py-3 text-sm font-medium text-gray-900 dark:text-gray-300"
-                    >
-                      {buildType}
-                    </label>
-                  </div>
-                </li>
+            <fieldset>
+              <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                Build Type
+              </label>
+              <ul className="items-center rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                {["all", ...buildTypes].map((buildType) => (
+                  <li
+                    key={buildType}
+                    className="border-b border-gray-200 dark:border-gray-600 sm:border-b-0 sm:border-r"
+                  >
+                    <div className="flex items-center pl-3">
+                      <input
+                        id={`build-radio-${buildType}`}
+                        type="radio"
+                        value={buildType}
+                        name="list-radio"
+                        checked={buildType === selectedBuildType}
+                        className="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-500 dark:bg-gray-600 dark:ring-offset-gray-700 dark:focus:ring-blue-600"
+                        onChange={(e) => setSelectedBuildType(e.target.value)}
+                      />
+                      <label
+                        htmlFor={`build-radio-${buildType}`}
+                        className="ml-2 w-full py-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      >
+                        {buildType}
+                      </label>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </fieldset>
+          </Form>
+
+          <section className="flex w-full flex-col gap-4">
+            <h2 className="text-2xl text-white">Matching Builds</h2>
+            <section className="grid grid-cols-3 gap-4">
+              {filteredBuilds.map((build) => (
+                <BuildCard key={build.id} build={build} />
               ))}
-            </ul>
-          </fieldset>
-        </Form>
-
-        <section className="flex flex-col gap-4">
-          <h2 className="text-2xl text-white">Matching Builds</h2>
-          <section className="grid grid-cols-3 gap-4">
-            {filteredBuilds.map((build) => (
-              <BuildCard key={build.id} build={build} />
-            ))}
+            </section>
           </section>
-        </section>
+        </div>
       </main>
     </>
   );
