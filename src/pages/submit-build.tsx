@@ -18,6 +18,41 @@ const units: Record<races, TStep[]> = {
       name: "drone",
       supply: 1,
     },
+    {
+      name: "zergling",
+      supply: 1,
+    },
+    {
+      name: "roach",
+      supply: 2,
+    },
+    {
+      name: "overlord",
+      supply: 0,
+    },
+    {
+      name: "infestor",
+      supply: 2,
+    },
+    {
+      name: "ultralisk",
+      supply: 6,
+    },
+    {
+      name: "baneling",
+      supply: 0,
+    },
+    {
+      name: "queen",
+      supply: 2,
+    },
+    { name: "hydralisk", supply: 2 },
+    { name: "mutalisk", supply: 2 },
+    { name: "corruptor", supply: 2 },
+    { name: "swarm host", supply: 3 },
+    { name: "viper", supply: 3 },
+    { name: "brood lord", supply: 2 },
+    { name: "overseer", supply: 0 },
   ],
   p: [],
   t: [],
@@ -37,9 +72,67 @@ const structures: Record<races, TStep[]> = {
       name: "hatchery",
       supply: -1,
     },
+    {
+      name: "evolution chamber",
+      supply: -1,
+    },
+    {
+      name: "spore crawler",
+      supply: -1,
+    },
+    {
+      name: "spine crawler",
+      supply: -1,
+    },
+    {
+      name: "roach warren",
+      supply: -1,
+    },
+    {
+      name: "baneling nest",
+      supply: -1,
+    },
+    {
+      name: "lair",
+      supply: 0,
+    },
+    {
+      name: "spire",
+      supply: -1,
+    },
+    {
+      name: "hydralisk den",
+      supply: -1,
+    },
+    {
+      name: "nydus network",
+      supply: -1,
+    },
+    {
+      name: "infestion pit",
+      supply: -1,
+    },
+    {
+      name: "hive",
+      supply: 0,
+    },
+    {
+      name: "ultralisk cavern",
+      supply: -1,
+    },
+    {
+      name: "greater spire",
+      supply: 0,
+    },
   ],
   p: [],
   t: [],
+};
+
+type TBuildStep = {
+  supply: number;
+  unit: string;
+  note: string;
 };
 
 const SubmitBuildPage: NextPage = () => {
@@ -53,6 +146,8 @@ const SubmitBuildPage: NextPage = () => {
   const [build, setBuildOrder] = useState("");
   const router = useRouter();
   const [supply, setSupply] = useState(12);
+
+  const [buildSteps, setBuildSteps] = useState<TBuildStep[]>([]);
 
   async function handleSubmitBuildOrder(e: React.FormEvent) {
     e.preventDefault();
@@ -68,8 +163,31 @@ const SubmitBuildPage: NextPage = () => {
   }
 
   function addStepToBuildOrder(stepName: TStep) {
-    setBuildOrder(build + "\n" + supply + " " + stepName.name);
+    setBuildSteps([
+      ...buildSteps,
+      {
+        supply,
+        unit: stepName.name,
+        note: "",
+      },
+    ]);
     setSupply(supply + stepName.supply);
+  }
+
+  function handleNoteUpdated(
+    originalBuildStep: TBuildStep,
+    newNoteValue: string
+  ) {
+    setBuildSteps(
+      buildSteps.map((buildStep) =>
+        buildStep === originalBuildStep
+          ? {
+              ...buildStep,
+              note: newNoteValue,
+            }
+          : buildStep
+      )
+    );
   }
 
   const race = matchUp.split("v")[0]!;
@@ -191,18 +309,40 @@ const SubmitBuildPage: NextPage = () => {
             <fieldset className="w-1/2">
               <label
                 htmlFor="build"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                className="mb-2 block text-sm font-medium  text-white"
               >
                 Build Order
               </label>
 
-              <textarea
-                required
-                id="build"
-                className="h-[400px] w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                value={build}
-                onChange={(e) => setBuildOrder(e.target.value)}
-              />
+              <table className="w-full text-left text-sm text-gray-400">
+                <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th className="px-6 py-3">supply</th>
+                    <th className="px-6 py-3">unit / structure</th>
+                    <th className="px-6 py-3">note</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {buildSteps.map((buildStep, idx) => (
+                    <tr
+                      key={idx}
+                      className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
+                    >
+                      <td className="px-6 py-3">{buildStep.supply}</td>
+                      <td className="px-6 py-3">{buildStep.unit}</td>
+                      <td className="px-6 py-3">
+                        <input
+                          className="bg-transparent p-1 hover:bg-white focus:bg-white"
+                          value={buildStep.note}
+                          onChange={(e) =>
+                            handleNoteUpdated(buildStep, e.target.value)
+                          }
+                        ></input>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </fieldset>
 
             <div className="flex w-1/2 gap-8">
