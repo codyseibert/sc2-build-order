@@ -28,6 +28,21 @@ export const buildsRouter = router({
 
       return build;
     }),
+  incrementBuildOrderView: publicProcedure
+  
+  .input(z.object({ buildId: z.string() }))
+  .mutation(async ({ input, ctx }) => {
+    const build = await ctx.prisma.buildOrder.update({
+      where: { id: input.buildId },
+      data: {
+        views: {
+          increment: 1,
+        },
+      }
+    });
+
+    return build;
+  }),
   getBuildsByMatchUp: publicProcedure
     .input(z.object({ matchUp: z.string() }))
     .query(async ({ ctx, input }) => {

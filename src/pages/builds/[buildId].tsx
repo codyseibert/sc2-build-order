@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { trpc } from "../../utils/trpc";
 
 const BuildPage: NextPage = () => {
@@ -12,6 +13,14 @@ const BuildPage: NextPage = () => {
     buildId,
   });
 
+  const {mutate} = trpc.builds.incrementBuildOrderView.useMutation()
+
+  useEffect(() => {
+    mutate({buildId})
+  }, [mutate, buildId])
+
+  const numberOfViews = build.data?.views
+
   return (
     <>
       <Head>
@@ -22,6 +31,8 @@ const BuildPage: NextPage = () => {
 
       <main className="container m-auto flex flex-col gap-12 bg-gray-800 pt-12">
         <h1 className="text-4xl text-white">{build.data?.title}</h1>
+
+        <span>viewed <b>{numberOfViews}</b> amount of times</span>
 
         <pre className="bg-gray-500 p-4">{build.data?.build}</pre>
       </main>

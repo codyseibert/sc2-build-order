@@ -66,4 +66,5 @@ model BuildOrder {
   author String?
   title String @default("Unknown")
   description String?
+  views Int @default(0)
 }
