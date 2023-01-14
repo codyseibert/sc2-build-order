@@ -110,7 +110,7 @@ const FindBuildsPage: NextPage = () => {
     builds.refetch();
   }, [router.isReady, builds]);
 
-  const lowerCaseSearch = search.toLocaleLowerCase();
+  const lowerCaseSearch = search.toLowerCase();
 
   const filteredBuilds = (builds.data ?? [])
     .filter((build) =>
